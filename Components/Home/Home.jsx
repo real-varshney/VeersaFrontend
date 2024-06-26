@@ -4,14 +4,14 @@ import Div from '../../Utils/Div'
 
 
 const {width, height} = Dimensions.get("screen");
-const Home = () => {
+const Home = ({onNotification}) => {
   return (
     <View>
        <View style={{paddingHorizontal: 20, justifyContent: 'space-between', flexDirection: 'row', marginTop: 12, alignItems: 'center'}}>
         <TouchableOpacity>
             <Image source={require('../../assets/Images/user.png')} style={{height: 47, width: 47}}/>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onNotification}>
             <View style={{
                 position: 'absolute',
                 right: 0,

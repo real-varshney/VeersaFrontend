@@ -3,10 +3,13 @@ import { View } from 'react-native'
 import Home from '../Components/Home/Home'
 import SafeView from '../Utils/SafeView'
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
+  const onNotification = () => {
+    navigation.navigate('notification')
+  }
   return (
     <SafeView>
-     <Home />
+     <Home onNotification={onNotification}/>
     </SafeView>
   )
 }
