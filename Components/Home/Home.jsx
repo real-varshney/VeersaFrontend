@@ -1,15 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, TextInput, TouchableOpacity, View , Dimensions, ScrollView} from 'react-native'
 import Div from '../../Utils/Div'
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import Appointment from '../Appointment/Appointment';
+import { useApp } from '../../AppContext';
 
 
 const {width, height} = Dimensions.get("screen");
-const Home = ({onNotification}) => {
+const Home = ({onNotification,bottomSheetModalRef, snapPoints, handleSheetChanges, renderBackdrop, handlePresentModalPress}) => {
+  const {authState, category} = useApp();
+  // const getRandomElement = (array) => {
+  //   if (array.length === 0) {
+  //     return null; // Return null or handle empty array case as needed
+  //   }
+  //   const randomIndex = Math.floor(Math.random() * array.length);
+  //   return array[randomIndex];
+  // };
+  // const cid = getRandomElement(category.id);
+  // useEffect(()=> {
+  //   console.log("Home")
+  
+  // })
   return (
     <View>
        <View style={{paddingHorizontal: 20, justifyContent: 'space-between', flexDirection: 'row', marginTop: 12, alignItems: 'center'}}>
+       <BottomSheetModal 
+        enableDismissOnClose={true}
+          ref={bottomSheetModalRef}
+          index={0}
+          animateOnMount
+          onChange={handleSheetChanges}
+          snapPoints={snapPoints}
+          handleHeight={100}
+          backdropComponent={renderBackdrop}
+
+        >
+          <BottomSheetView>
+            <Appointment />
+          </BottomSheetView>
+        </BottomSheetModal>
         <TouchableOpacity>
-            <Image source={require('../../assets/Images/user.png')} style={{height: 47, width: 47}}/>
+        {
+                authState.image ? 
+                <Image source={{uri: authState.image}} style={{height: 47, width: 47, borderRadius: 999}}/>:
+                <Image source={require('../../assets/Images/user.png')} style={{height: 47, width: 47}}/>
+
+            }
         </TouchableOpacity>
         <TouchableOpacity onPress={onNotification}>
             <View style={{
@@ -25,7 +61,7 @@ const Home = ({onNotification}) => {
             <Image source={require('../../assets/Images/bell.png')} style={{height: 30, width: 30, resizeMode: 'center'}}/>
         </TouchableOpacity>
       </View>
-      <Div style={{fontStyle: 'font-semibold', fontSize: 24, paddingHorizontal: 20, paddingTop: 12}}> Hello Pranav !</Div>
+      <Div style={{fontStyle: 'font-semibold', fontSize: 24, paddingHorizontal: 20, paddingTop: 12}}> Hello {authState.name}!</Div>
 
       <View style={{backgroundColor: '#ffffff', flexDirection: 'row', marginHorizontal: 30, justifyContent: 'space-between', padding: 10, borderRadius: 10, elevation: 10, marginTop: 20}}> 
         <TextInput style={{width: width*0.7, fontSize: 14, fontFamily: 'font-regular'}} placeholder="Enter Specialty or Doctor's Name"/>
@@ -52,6 +88,7 @@ const Home = ({onNotification}) => {
     </View>
         <Div style={{fontFamily: 'font-semibold' , color: '#1E1F2E', fontSize: 24, paddingHorizontal: 30, marginTop: 20, marginTop: 20}}>Top Doctors</Div>
         <ScrollView style={{ marginHorizontal: 30, maxHeight: height*0.47, marginTop: 20, marginBottom: 20}} showsVerticalScrollIndicator={false}>
+            <TouchableOpacity onPress={handlePresentModalPress}>
             <View style={{backgroundColor: 'white', flexDirection:"row", padding: 16, borderRadius: 12, justifyContent:'space-between', marginBottom: 10, elevation: 5}}>
                 <View style={{flexDirection:"row",}}>
                 <View style={{height: 87, width: 88, borderRadius: 14, backgroundColor: 'white', alignItems: 'center', }}>
@@ -75,144 +112,7 @@ const Home = ({onNotification}) => {
                 <Div>0.2km</Div>
                 </View>
             </View>
-            <View style={{backgroundColor: 'white', flexDirection:"row", padding: 16, borderRadius: 12, justifyContent:'space-between', marginBottom: 10, elevation: 5}}>
-                <View style={{flexDirection:"row",}}>
-                <View style={{height: 87, width: 88, borderRadius: 14, backgroundColor: 'white', alignItems: 'center', }}>
-                <Image source={require('../../assets/Images/user.png')} style={{height: 87, width: 88, resizeMode: 'contain'}}/>
-                </View>
-                <View style={{marginLeft: 10}}> 
-                    <Div style={{fontFamily: 'font-semibold', color: '#1E1F2E', fontSize: 15}}>Dr. Pranav Pathway</Div>
-                    <Div style={{color: '#9C9C9C', fontSize: 15}}>Senior Surgeon</Div>
-                    <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <Image source={require('../../assets/Images/timer.png')} style={{height: 14, width: 12}}/>
-                    <Div style={{ color: '#333333', fontSize: 13}}>{" "}10:30AM - 3:30AM</Div>
-                    </View>
-                    <Div style={{fontFamily: 'font-semibold', color: '#9C9C9C', fontSize: 15}}>Fee: $12</Div>
-                </View>
-                </View>
-                <View style={{justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Image source={require('../../assets/Images/star.png')} style={{width: 16, height: 15}}/>
-                    <Div>{" "}4.5</Div>
-                </View>
-                <Div>0.2km</Div>
-                </View>
-            </View>
-            <View style={{backgroundColor: 'white', flexDirection:"row", padding: 16, borderRadius: 12, justifyContent:'space-between', marginBottom: 10, elevation: 5}}>
-                <View style={{flexDirection:"row",}}>
-                <View style={{height: 87, width: 88, borderRadius: 14, backgroundColor: 'white', alignItems: 'center', }}>
-                <Image source={require('../../assets/Images/user.png')} style={{height: 87, width: 88, resizeMode: 'contain'}}/>
-                </View>
-                <View style={{marginLeft: 10}}> 
-                    <Div style={{fontFamily: 'font-semibold', color: '#1E1F2E', fontSize: 15}}>Dr. Pranav Pathway</Div>
-                    <Div style={{color: '#9C9C9C', fontSize: 15}}>Senior Surgeon</Div>
-                    <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <Image source={require('../../assets/Images/timer.png')} style={{height: 14, width: 12}}/>
-                    <Div style={{ color: '#333333', fontSize: 13}}>{" "}10:30AM - 3:30AM</Div>
-                    </View>
-                    <Div style={{fontFamily: 'font-semibold', color: '#9C9C9C', fontSize: 15}}>Fee: $12</Div>
-                </View>
-                </View>
-                <View style={{justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Image source={require('../../assets/Images/star.png')} style={{width: 16, height: 15}}/>
-                    <Div>{" "}4.5</Div>
-                </View>
-                <Div>0.2km</Div>
-                </View>
-            </View>
-            <View style={{backgroundColor: 'white', flexDirection:"row", padding: 16, borderRadius: 12, justifyContent:'space-between', marginBottom: 10, elevation: 5}}>
-                <View style={{flexDirection:"row",}}>
-                <View style={{height: 87, width: 88, borderRadius: 14, backgroundColor: 'white', alignItems: 'center', }}>
-                <Image source={require('../../assets/Images/user.png')} style={{height: 87, width: 88, resizeMode: 'contain'}}/>
-                </View>
-                <View style={{marginLeft: 10}}> 
-                    <Div style={{fontFamily: 'font-semibold', color: '#1E1F2E', fontSize: 15}}>Dr. Pranav Pathway</Div>
-                    <Div style={{color: '#9C9C9C', fontSize: 15}}>Senior Surgeon</Div>
-                    <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <Image source={require('../../assets/Images/timer.png')} style={{height: 14, width: 12}}/>
-                    <Div style={{ color: '#333333', fontSize: 13}}>{" "}10:30AM - 3:30AM</Div>
-                    </View>
-                    <Div style={{fontFamily: 'font-semibold', color: '#9C9C9C', fontSize: 15}}>Fee: $12</Div>
-                </View>
-                </View>
-                <View style={{justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Image source={require('../../assets/Images/star.png')} style={{width: 16, height: 15}}/>
-                    <Div>{" "}4.5</Div>
-                </View>
-                <Div>0.2km</Div>
-                </View>
-            </View>
-            <View style={{backgroundColor: 'white', flexDirection:"row", padding: 16, borderRadius: 12, justifyContent:'space-between', marginBottom: 10, elevation: 5}}>
-                <View style={{flexDirection:"row",}}>
-                <View style={{height: 87, width: 88, borderRadius: 14, backgroundColor: 'white', alignItems: 'center', }}>
-                <Image source={require('../../assets/Images/user.png')} style={{height: 87, width: 88, resizeMode: 'contain'}}/>
-                </View>
-                <View style={{marginLeft: 10}}> 
-                    <Div style={{fontFamily: 'font-semibold', color: '#1E1F2E', fontSize: 15}}>Dr. Pranav Pathway</Div>
-                    <Div style={{color: '#9C9C9C', fontSize: 15}}>Senior Surgeon</Div>
-                    <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <Image source={require('../../assets/Images/timer.png')} style={{height: 14, width: 12}}/>
-                    <Div style={{ color: '#333333', fontSize: 13}}>{" "}10:30AM - 3:30AM</Div>
-                    </View>
-                    <Div style={{fontFamily: 'font-semibold', color: '#9C9C9C', fontSize: 15}}>Fee: $12</Div>
-                </View>
-                </View>
-                <View style={{justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Image source={require('../../assets/Images/star.png')} style={{width: 16, height: 15}}/>
-                    <Div>{" "}4.5</Div>
-                </View>
-                <Div>0.2km</Div>
-                </View>
-            </View>
-            <View style={{backgroundColor: 'white', flexDirection:"row", padding: 16, borderRadius: 12, justifyContent:'space-between', marginBottom: 10, elevation: 5}}>
-                <View style={{flexDirection:"row",}}>
-                <View style={{height: 87, width: 88, borderRadius: 14, backgroundColor: 'white', alignItems: 'center', }}>
-                <Image source={require('../../assets/Images/user.png')} style={{height: 87, width: 88, resizeMode: 'contain'}}/>
-                </View>
-                <View style={{marginLeft: 10}}> 
-                    <Div style={{fontFamily: 'font-semibold', color: '#1E1F2E', fontSize: 15}}>Dr. Pranav Pathway</Div>
-                    <Div style={{color: '#9C9C9C', fontSize: 15}}>Senior Surgeon</Div>
-                    <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <Image source={require('../../assets/Images/timer.png')} style={{height: 14, width: 12}}/>
-                    <Div style={{ color: '#333333', fontSize: 13}}>{" "}10:30AM - 3:30AM</Div>
-                    </View>
-                    <Div style={{fontFamily: 'font-semibold', color: '#9C9C9C', fontSize: 15}}>Fee: $12</Div>
-                </View>
-                </View>
-                <View style={{justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Image source={require('../../assets/Images/star.png')} style={{width: 16, height: 15}}/>
-                    <Div>{" "}4.5</Div>
-                </View>
-                <Div>0.2km</Div>
-                </View>
-            </View>
-            <View style={{backgroundColor: 'white', flexDirection:"row", padding: 16, borderRadius: 12, justifyContent:'space-between', marginBottom: 10, elevation: 5}}>
-                <View style={{flexDirection:"row",}}>
-                <View style={{height: 87, width: 88, borderRadius: 14, backgroundColor: 'white', alignItems: 'center', }}>
-                <Image source={require('../../assets/Images/user.png')} style={{height: 87, width: 88, resizeMode: 'contain'}}/>
-                </View>
-                <View style={{marginLeft: 10}}> 
-                    <Div style={{fontFamily: 'font-semibold', color: '#1E1F2E', fontSize: 15}}>Dr. Pranav Pathway</Div>
-                    <Div style={{color: '#9C9C9C', fontSize: 15}}>Senior Surgeon</Div>
-                    <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <Image source={require('../../assets/Images/timer.png')} style={{height: 14, width: 12}}/>
-                    <Div style={{ color: '#333333', fontSize: 13}}>{" "}10:30AM - 3:30AM</Div>
-                    </View>
-                    <Div style={{fontFamily: 'font-semibold', color: '#9C9C9C', fontSize: 15}}>Fee: $12</Div>
-                </View>
-                </View>
-                <View style={{justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Image source={require('../../assets/Images/star.png')} style={{width: 16, height: 15}}/>
-                    <Div>{" "}4.5</Div>
-                </View>
-                <Div>0.2km</Div>
-                </View>
-            </View>
+            </TouchableOpacity>
           
         </ScrollView>
     </View>

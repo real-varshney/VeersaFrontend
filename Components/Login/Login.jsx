@@ -10,7 +10,7 @@ const {width, height} = Dimensions.get("screen");
 
 
 const Login = (props) => {
-  const {handleGoogleButton, bottomSheetModalRef, snapPoints, handleSheetChanges, renderBackdrop} = props;
+  const {handleGoogleButton, bottomSheetModalRef, snapPoints, handleSheetChanges, renderBackdrop, res} = props;
   return (
     <View style={{justifyContent: 'space-between', height: height }}>
       <View style={{alignItems: 'center', marginTop: 40}}>
@@ -26,10 +26,10 @@ const Login = (props) => {
 
         >
           <BottomSheetView>
-            <Doctor />
+            <Doctor res={res}/>
           </BottomSheetView>
         </BottomSheetModal>
-        <Image source={require('../../assets/Images/google.png')} style={{height: 40, width: 40}}/>
+        <Image source={require('../../assets/Images/logo.png')} style={{height: 60, width: 60}}/>
       </View>
       <View>
         <View style={{alignItems: 'center', marginTop: 40}}>

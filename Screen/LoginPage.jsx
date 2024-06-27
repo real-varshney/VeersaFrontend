@@ -11,10 +11,11 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const LoginPagejsx = ({navigation}) => {
 
   const [loader, setLoader] = useState(false)
+  const [res, setRes] = useState(null)
 
   const ConfigureGoogleSignIn = () => {
     GoogleSignin.configure({
-      androidClientId: '<clientID>',
+      androidClientId: '484831520174-8a4gaesq17qiskr3j3f65d1rpaomet75.apps.googleusercontent.com',
     })
   }
   useEffect(()=> {
@@ -27,9 +28,11 @@ const LoginPagejsx = ({navigation}) => {
     try {
       setLoader(true)
       await GoogleSignin.hasPlayServices();
-      GoogleSignin.getTokens().then((res)=> {
+      GoogleSignin.signIn().then((res)=> {
+        setRes(res)
         //store data function.
-
+        console.log('res', res)
+        handlePresentModalPress();
       }).catch((err)=> {
         console.log(err)
         setLoader(false)
@@ -43,7 +46,8 @@ const LoginPagejsx = ({navigation}) => {
 
   const handleGoogleButton = () => {
     // navigation.navigate('Home')
-    handlePresentModalPress();
+    // handlePresentModalPress();
+    signInWithGoogle();
 
   }
 
@@ -80,6 +84,7 @@ const LoginPagejsx = ({navigation}) => {
       snapPoints={snapPoints}
       handleSheetChanges={handleSheetChanges}
       renderBackdrop={renderBackdrop}
+      res={res}
     />
     </SafeView>
     </BottomSheetModalProvider>
