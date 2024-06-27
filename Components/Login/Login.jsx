@@ -1,16 +1,35 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Text, View, Dimensions, Image, TextInput, TouchableOpacity } from "react-native";
 import Div from "../../Utils/Div";
+import { BottomSheetModal, BottomSheetView} from "@gorhom/bottom-sheet";
+import { useApp } from "../../AppContext";
+import Doctor from "../ChooseDoctor/Doctor";
 
 const {width, height} = Dimensions.get("screen");
 
+
+
 const Login = (props) => {
-  const {handleGoogleButton} = props;
+  const {handleGoogleButton, bottomSheetModalRef, snapPoints, handleSheetChanges, renderBackdrop, res} = props;
   return (
     <View style={{justifyContent: 'space-between', height: height }}>
       <View style={{alignItems: 'center', marginTop: 40}}>
+      <BottomSheetModal 
+      enableDismissOnClose={true}
+          ref={bottomSheetModalRef}
+          index={0}
+          enablePanDownToClose={false}
+          onChange={handleSheetChanges}
+          snapPoints={snapPoints}
+          handleHeight={100}
+          backdropComponent={renderBackdrop}
 
-        <Image source={require('../../assets/Images/google.png')} style={{height: 40, width: 40}}/>
+        >
+          <BottomSheetView>
+            <Doctor res={res}/>
+          </BottomSheetView>
+        </BottomSheetModal>
+        <Image source={require('../../assets/Images/logo.png')} style={{height: 60, width: 60}}/>
       </View>
       <View>
         <View style={{alignItems: 'center', marginTop: 40}}>

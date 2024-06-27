@@ -5,6 +5,8 @@ import LoginPage from "./Screen/LoginPage.jsx";
 import { useEffect } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import HomeScreen from "./Screen/HomeScreen.jsx";
+import { AppProvider } from "./AppContext.js";
+import NotificationScreen from "./Screen/NotificationScreen.jsx";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -36,6 +38,7 @@ if (!fontsLoaded && !fontError) {
 }
 
   return(
+    <AppProvider>
     <NavigationContainer>
     <Stack.Navigator>
     <Stack.Screen
@@ -52,7 +55,15 @@ if (!fontsLoaded && !fontError) {
               headerShown: false,
             }}
           />
+    <Stack.Screen
+            name="notification"
+            component={NotificationScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
     </Stack.Navigator>
   </NavigationContainer>
+  </AppProvider>
   )
 }

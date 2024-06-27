@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Login from '../Components/Login/Login'
 import SafeView from '../Utils/SafeView'
 import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { BottomSheetBackdrop, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const LoginPagejsx = ({navigation}) => {
 
   const [loader, setLoader] = useState(false)
+  const [res, setRes] = useState(null)
 
   const ConfigureGoogleSignIn = () => {
     GoogleSignin.configure({
-      androidClientId: '<clientID>',
+      androidClientId: '484831520174-8a4gaesq17qiskr3j3f65d1rpaomet75.apps.googleusercontent.com',
     })
   }
   useEffect(()=> {
@@ -25,9 +28,11 @@ const LoginPagejsx = ({navigation}) => {
     try {
       setLoader(true)
       await GoogleSignin.hasPlayServices();
-      GoogleSignin.getTokens().then((res)=> {
+      GoogleSignin.signIn().then((res)=> {
+        setRes(res)
         //store data function.
-
+        console.log('res', res)
+        handlePresentModalPress();
       }).catch((err)=> {
         console.log(err)
         setLoader(false)
@@ -40,13 +45,50 @@ const LoginPagejsx = ({navigation}) => {
   }
 
   const handleGoogleButton = () => {
-    navigation.navigate('Home')
+    // navigation.navigate('Home')
+    // handlePresentModalPress();
+    signInWithGoogle();
+
   }
+
+  const bottomSheetModalRef = useRef(null);
+
+  const snapPoints = useMemo(() => [ '100%'], []);
+
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={1}
+        appearsOnIndex={2}
+        style={{ backgroundColor: '#00000', opacity: 1}}
+      />
+    ),
+    []
+  );
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleSheetChanges = useCallback((index) => {
+    console.log('handleSheetChanges', index);
+  }, []);
   
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    <BottomSheetModalProvider>
     <SafeView>
-    <Login handleGoogleButton={handleGoogleButton}/>
+    <Login
+      handleGoogleButton={handleGoogleButton}
+      bottomSheetModalRef={bottomSheetModalRef}
+      snapPoints={snapPoints}
+      handleSheetChanges={handleSheetChanges}
+      renderBackdrop={renderBackdrop}
+      res={res}
+    />
     </SafeView>
+    </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   )
 }
 
